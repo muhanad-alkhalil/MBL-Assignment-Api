@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class MessageController extends Controller
     public function index()
     {
         $user = User::find(1);
-        return $user->recivedMessages;
+        return MessageResource::collection($user->recivedMessages);
     }
 
     /**
