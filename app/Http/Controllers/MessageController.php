@@ -6,6 +6,7 @@ use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
@@ -16,7 +17,7 @@ class MessageController extends Controller
      */
     public function index()
     {
-        $user = User::find(1);
+        $user = Auth::user();
         return MessageResource::collection($user->recivedMessages);
     }
 
@@ -39,7 +40,22 @@ class MessageController extends Controller
      */
     public function show($id)
     {
-        //
+        $message = Message::find($id);
+        if (!$message) {
+            return response(["message" => "The message not found!"], 404);
+        }
+
+        $user = Auth::user();
+        if ($message->reciver->id != $user->id && $message->sender->id != $user->id) {
+            return response(["message" => "unauthorized!"], 401);
+        }
+
+        if (!$message->isRead) {
+            $message->isRead = 1;
+            $message->save();
+        }
+
+        return new MessageResource($message);
     }
 
     /**
