@@ -16,20 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post("login", [AuthController::class, 'login']);
-
-Route::middleware('auth:sanctum')->group(
+Route::group(
+    [
+        'prefix' => 'v1',
+    ],
     function () {
-        Route::get("messages", [MessageController::class, 'index']);
-        Route::get("message/{id}", [MessageController::class, 'show']);
-        Route::post("logout", [AuthController::class, 'logout']);
+        Route::post("login", [AuthController::class, 'login']);
+
+        Route::middleware('auth:sanctum')->group(
+            function () {
+                Route::get("messages", [MessageController::class, 'index']);
+                Route::get("message/{id}", [MessageController::class, 'show']);
+                Route::post("logout", [AuthController::class, 'logout']);
+            }
+        );
     }
 );
-
-
-// Route::prefix('v1')->group(
-//     function () {
-//         Route::get("messages", [MessageController::class, 'index']);
-//         Route::get("message/{id}", [MessageController::class, 'show']);
-//     }
-// );

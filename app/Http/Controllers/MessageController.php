@@ -10,10 +10,39 @@ use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *      path="/messages",
+     *      operationId="getMessageList",
+     *      tags={"Messages"},
+     *      summary="Returns list of Messages",
+     *      description="Get list of Messages For the Current User",
+     *      security={ {"bearer": {} }},
      *
-     * @return \Illuminate\Http\Response
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                  @OA\Items(
+     *                      ref="#/components/schemas/MessageResource",
+     *                  )
+     *              ),
+     *          )
+     *       ),
+     *
+     *      @OA\Response(
+     *          response=401,
+     *          description="Returns when user is not authenticated",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *          )
+     *      )
+     * )
      */
     public function index()
     {
@@ -33,11 +62,66 @@ class MessageController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *      path="/message/{id}",
+     *      operationId="getMessageById",
+     *      tags={"Messages"},
+     *      summary="Returns a specific Message",
+     *      description="Get specific Messages and Mark it as readed",
+     *      security={ {"bearer": {} }},
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *      @OA\Parameter(
+     *      description="Message Id",
+     *      in="path",
+     *      name="id",
+     *      required=true,
+     *      example="1",
+     *      @OA\Schema(
+     *          type="integer",
+     *          format="int64"
+     *    )
+     * ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="object",
+     *                   ref="#/components/schemas/MessageResource",
+     *              ),
+     *          )
+     *       ),
+     *
+     *      @OA\Response(
+     *          response=403,
+     *          description="Returns when user is not Authorized to see the message",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="unauthorized!")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Returns when user is not authenticated",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *          )
+     *      ),
+     *
+     *
+     *      @OA\Response(
+     *          response=404,
+     *          description="Returns when Message is not Found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="The message not found!")
+     *          )
+     *      )
+     *
+     * )
      */
+
     public function show($id)
     {
         $message = Message::find($id);
@@ -47,7 +131,7 @@ class MessageController extends Controller
 
         $user = Auth::user();
         if ($message->reciver->id != $user->id && $message->sender->id != $user->id) {
-            return response(["message" => "unauthorized!"], 401);
+            return response(["message" => "unauthorized!"], 403);
         }
 
         if (!$message->isRead) {
