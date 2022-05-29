@@ -28,6 +28,7 @@ Route::group(
                 Route::get("messages", [MessageController::class, 'index']);
                 Route::get("message/{id}", [MessageController::class, 'show']);
                 Route::post("logout", [AuthController::class, 'logout']);
+                Route::get("user", [MessageController::class, 'user']);
             }
         );
     }

@@ -294,7 +294,7 @@
                         "type": "string",
                         "example": "Title"
                     },
-                    "contetnt": {
+                    "content": {
                         "type": "string",
                         "example": "Message Content"
                     },

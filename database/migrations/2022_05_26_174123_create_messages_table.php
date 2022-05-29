@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string("subject");
-            $table->text("contetnt");
+            $table->text("content");
             $table->boolean("isRead");
 
             $table->foreignId('sender_id')->constrained('users');

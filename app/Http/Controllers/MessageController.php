@@ -164,4 +164,22 @@ class MessageController extends Controller
     {
         //
     }
+
+
+    // It should not be here i know, but i make it late 😅 Sorry 🙏
+
+    public function user()
+    {
+        $user = Auth::user();
+        $totalMessages = $user->recivedMessages->count();
+        $unreadMessages = $user->recivedMessages->where('isRead', 0)->count();
+
+        return [
+            "data" => [
+                "username" => $user->name,
+                "totalMessages" => $totalMessages,
+                "unreadMessages" => $unreadMessages,
+            ]
+        ];
+    }
 }

@@ -22,7 +22,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *          example="Title"
  *       ),
  *       @OA\Property(
- *          property="contetnt",
+ *          property="content",
  *          type="string",
  *          example="Message Content"
  *       ),
@@ -46,7 +46,7 @@ class MessageResource extends JsonResource
         return [
             'id' => $this->id,
             'subject' => $this->subject,
-            'contetnt' => $this->contetnt,
+            'content' => $this->content,
             'isRead' => $this->isRead,
         ];
     }
