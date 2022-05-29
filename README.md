@@ -12,8 +12,8 @@ Copy .env.example file to .env on the root folder. You can type copy .env.exampl
 Open your .env file and change the database name (mbl), username (DB_USERNAME) and password (DB_PASSWORD) field correspond to your configuration.
 
 ```bash
-Run php artisan key:generate
-Run php artisan migrate
+php artisan key:generate
+php artisan migrate
 php artisan db:seed
-Run php artisan serve
+php artisan serve
 ```
